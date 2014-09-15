@@ -3,6 +3,7 @@
 #include <stack>
 #include <sstream>
 #include <cstdlib>
+#include <math.h>
 
 using namespace std;
 int calculator(char * p);
@@ -14,6 +15,11 @@ bool isExponent(char *p); //checked
 int precedence(char *p); //checked
 bool checkPre(char *p1, char *p2); //checked
 int calculator2(char ** ap);
+int Exponent1(int base, int e);
+int Exponent2(int base, int e);
+int Exponent3(int base, int e);
+int Exponent4(int base, int e);
+
 // an advice from debugging segmentation fault: set your pointers to NULL when you declare them (or immediately initialize them)
 //http://www.cprogramming.com/debugging/segfaults.html
 
@@ -21,7 +27,7 @@ int main(int argc, char const *argv[])
 {
 	//char a[]="2,3,5,+,*";
 	//cout<< calculator(a) << endl;
-	char b[]="1*(2+3)**2"; // no matter the example, always say "wrong input !!" ????????????????
+	char b[]="2**26"; // no matter the example, always say "wrong input !!" ????????????????
 	char * p = b;
 	//char ** ap=new char*[30];
 	//ap=convert(p);
@@ -246,13 +252,8 @@ int calculator2(char ** p){ //takes in the converted array of strings/pointers a
 			cout << "rVal is " << rVal << endl;
 			mystack.pop();
 			lVal=mystack.top();
-			mystack.pop();
-			if(isExponent(*p)) {
-				int l=3;
-				int r=3;
-				//result=lVal ** rVal;
-				result=3**3;
-			} 
+			mystack.pop(); 
+			if(isExponent(*p)) result=Exponent4(lVal,rVal);
 			else result=performOp(lVal,rVal,**p);
 			mystack.push(result);
 			cout << "rVal=" << rVal<< " lVal=" <<lVal << " result=" << result << endl;
@@ -312,4 +313,74 @@ int performOp(int lVal,int rVal, char c){
 	else if(c=='/') result=lVal/rVal;
 	else cout << "error" << endl;
 	return result;
+}
+
+int Exponent1(int base, int e){
+	int result=1;
+	if(e<0){
+		cout << "cannot calculate this yet" << endl;
+		return 0;
+	}
+	for(int i=0; i<e; i++){
+		result=base*result;
+	}
+	return result;
+}
+
+int Exponent2(int base, int e){ // time cost is log2n. but this gives wrong result
+	if(e<0){
+		cout << "cannot calculate this yet" << endl;
+		return 0;
+	}
+	int b=base;
+	while(e>1){
+		if (e%2==0)
+		{
+			base=base*base;
+		}
+		else {
+			base=base*base*b;
+		}
+		e=e/2;
+		cout << "e= " << e <<endl;
+		cout << "base= " << base <<endl;
+
+	}
+	return base;
+}
+
+int Exponent3(int base, int e){ // time cost is log2n
+	if(e<0){
+		cout << "cannot calculate this yet" << endl;
+		return 0;
+	}
+	int newbase;
+	int olde=e;
+	if(e==1) return base;
+	else if(e==0) return 1;
+	else if(e==2) return base*base;
+	else{
+		while(e>1){
+			e=e/2;
+			if(olde%2==0){
+				newbase=Exponent3(newbase,2);
+			}
+			else{
+				newbase=Exponent3(newbase,2) * base;
+			}
+
+			cout << "e= " << e <<endl;
+			cout << "newbase= " << newbase <<endl;
+	
+		}
+	}
+	return newbase;
+
+}
+int Exponent4(int base, int e){ // time cost is log2n
+	if(e<1)return 0;
+	if(e==1)return base;
+	int half=Exponent4(base, e/2);
+	if(e%2==1)return base*half*half;
+	return half*half;
 }
