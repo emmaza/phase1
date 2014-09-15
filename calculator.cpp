@@ -1,5 +1,4 @@
 /* calculator*/
-
 #include<stdio.h>
 char input[] = "2+3";
 int main(){
