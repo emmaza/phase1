@@ -313,4 +313,3 @@ int performOp(int lVal,int rVal, char c){
 	else cout << "error" << endl;
 	return result;
 }
-
