@@ -27,11 +27,8 @@ int main(int argc, char const *argv[])
 {
 	//char a[]="2,3,5,+,*";
 	//cout<< calculator(a) << endl;
-	char b[]="2**26"; // no matter the example, always say "wrong input !!" ????????????????
-	char * p = b;
 	//char ** ap=new char*[30];
 	//ap=convert(p);
-	char **ap=convert(p);
 	/*
 	while(*ap != 0){
 		cout << "*ap = " << *ap << endl;
@@ -39,11 +36,26 @@ int main(int argc, char const *argv[])
 		ap++;
 	}
 	*/
-	char **ap2;
-	ap2=convert(p);
-	int k;
-	k=calculator2(ap2);
-	cout << "the result is: " << k << endl;
+	//char b[]="2**26"; // no matter the example, always say "wrong input !!" ????????????????
+	//char * p = b;
+	//char **ap2;
+	//ap2=convert(p);
+	//int k;
+	//k=calculator2(ap2);
+	//cout << "the result is: " << k << endl;
+
+    string input;
+	char **converted_input;
+    do{
+            cout << ">>> ";
+            getline(cin, input);
+            if(input.find("q")==0)
+                break;
+            if(input=="")continue;
+			char *ap=(char *)input.c_str();
+			converted_input=convert(ap);
+            cout << calculator2(converted_input)<<endl;
+    } while(true);
 	
 	/* 
 	char *k=(char *)malloc(sizeof(char)*2);  // why malloc is required here but not elsewhere?
